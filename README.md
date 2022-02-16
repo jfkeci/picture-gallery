@@ -1,4 +1,4 @@
-# vuex-todo
+# picture-gallery
 
 ## Project setup
 ```
