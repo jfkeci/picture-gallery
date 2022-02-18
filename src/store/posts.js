@@ -1,11 +1,12 @@
-const url = 'http://localhost:5001/posts'
-import axios from 'axios'
+
+import { getPosts, saveNewPost, toggleLike, deletePost } from '../reducers/api.js'
+//import {getComments, saveComment, updateComment, deleteCommet} from '../reducers/api.js'
 
 export default {
     state: {
-        currentPost: 'this is the first post ',
+        currentPost: null,
         posts: [],
-        postsLoading: false
+        loading: false
     },
     mutations: {
         setCurrentPost(state, currentPost) {
@@ -17,29 +18,29 @@ export default {
         addPost(state, post) {
             state.posts.push(post)
         },
-        setPostsLoading(state, loading) {
-            state.postsLoading = loading
+        setloading(state, loading) {
+            state.loading = loading
+        },
+        updatePost(state, post) {
+            let index = state.posts.findIndex((obj => obj._id == post._id))
+            state.posts[index] = post
+        },
+        deletePost(state, postId) {
+            state.posts = state.posts.filter((post) => post._id != postId);
         }
     },
     getters: {
         getCurrentPost: state => state.currentPost,
         getPosts: state => state.posts,
-        getPostsLoading: state => state.postsLoading,
+        getloading: state => state.loading,
         getPostCount: state => state.posts.length,
-        hasPosts: state => state.posts.length > 0,
+        hasPosts: state => state.posts.length > 0
     },
     actions: {
-        async getPosts(state, param) {
-            if (param.type == 'search') {
-                console.log('filter', param.filter)
-            }
-            state.commit('setPostsLoading', true)
-            await axios.get(url)
-                .then((res) => {
-                    state.commit('setPosts', res.data)
-                    state.commit('setPostsLoading', false)
-                }).catch(err => console.log(err))
-        }
+        getPosts,
+        saveNewPost,
+        toggleLike,
+        deletePost
     },
     modules: {}
 }

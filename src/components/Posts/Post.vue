@@ -18,51 +18,25 @@
         <v-card-title>{{ post.title }}</v-card-title>
       </v-img>
 
-      <v-card-subtitle class="pb-0"> Number 10 </v-card-subtitle>
-
-      <v-card-text class="text--primary">
-        <div>{{ post.body }}</div>
+      <v-card-text class="text--primary mt-2">
+        <div>Description: {{ post.body }}</div>
       </v-card-text>
-
+      <pre></pre>
       <v-card-actions>
-        <v-btn color="orange" text> Share </v-btn>
-
-        <v-btn color="orange" text> Explore </v-btn>
+        <v-btn color="orange" text @click="likePost">
+          <v-icon>mdi-thumb-up-outline</v-icon>
+          <v-icon>mdi-thumb-down-outline</v-icon>
+        </v-btn>
+        <pre>
+          {{ isLiked }}
+        </pre>
+        <v-btn color="orange" text v-if="post.createdBy == this.user">
+          Delete
+        </v-btn>
+        <v-btn @click="testit">testit</v-btn>
       </v-card-actions>
       <br />
       <br />
-    </v-card>
-    <v-card
-      v-if="noPosts"
-      :loading="loading"
-      class="mx-auto"
-      elevation="4"
-      outlined
-      shaped
-      style="margin-top: 5vh"
-      max-width="350"
-    >
-      <v-img
-        class="white--text align-end"
-        height="300px"
-        src="https://picsum.photos/1500/1500"
-      >
-        <v-card-title>Top 10 Australian beaches</v-card-title>
-      </v-img>
-
-      <v-card-subtitle class="pb-0"> Number 10 </v-card-subtitle>
-
-      <v-card-text class="text--primary">
-        <div>Whitehaven Beach</div>
-
-        <div>Whitsunday Island, Whitsunday Islands</div>
-      </v-card-text>
-
-      <v-card-actions>
-        <v-btn color="orange" text> Share </v-btn>
-
-        <v-btn color="orange" text> Explore </v-btn>
-      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -79,9 +53,27 @@ export default {
       default: false,
     },
   },
+  methods: {
+    likePost() {
+      this.$store.dispatch("toggleLike", this.post);
+    },
+    testit() {
+      this.$store.dispatch("deletePost", this.post._id);
+      this.setMessage("Successfully removed the post " + this.post.title);
+    },
+  },
   computed: {
     loading() {
       return this.$store.getters.getPostsLoading;
+    },
+    user() {
+      return this.$store.getters.getCurrentUser;
+    },
+    isLiked() {
+      let posts = this.$store.getters.getPosts;
+      let post = posts.filter((post) => post._id == this.post._id);
+      console.log(post[0]["_id"] == this.user);
+      return true;
     },
   },
 };

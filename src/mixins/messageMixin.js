@@ -5,17 +5,13 @@ export default {
     components: {
         Message
     },
-    data() {
-        return {
-            message: null
-        }
-    },
     methods: {
         setMessage(message, type = 'success') {
-            this.message = {
+            let newMessage = {
                 text: message,
                 type: type
             }
+            this.$store.commit('setMessage', newMessage)
         },
         emitMessage(message, type = 'success') {
             this.$emit('emit-message', message, type)
@@ -24,7 +20,7 @@ export default {
     watch: {
         message: {
             handler: _.debounce(function () {
-                this.message = null
+                this.$store.commit('setMessage', false)
             }, 5000),
             deep: true,
         },

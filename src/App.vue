@@ -35,8 +35,10 @@
 
           <template v-slot:extension>
             <v-tabs align-with-title>
-              <v-tab @click="getPosts('new')">New</v-tab>
-              <v-tab @click="getPosts('new')">Popular</v-tab>
+              <!-- <v-tab @click="getPosts('new')">New</v-tab>
+              <v-tab @click="getPosts('popular')">Popular</v-tab> -->
+              <v-tab>New</v-tab>
+              <v-tab>Popular</v-tab>
             </v-tabs>
           </template>
         </v-app-bar>
@@ -45,9 +47,17 @@
           id="scrolling-techniques-3"
           class="overflow-y-auto"
           max-height="100vh"
-          style="padding-top: 25vh"
+          style="padding-top: 30vh"
         >
-          <Message :message="message" />
+          <Message />
+          <v-row justify="center">
+            <v-progress-circular
+              v-if="loading"
+              class="text-xs-center"
+              indeterminate
+              color="purple"
+            ></v-progress-circular>
+          </v-row>
           <v-row no-gutters>
             <v-col cols="3">
               <SearchBar />
@@ -56,9 +66,6 @@
             <v-col style="padding: 5vh">
               <router-view />
             </v-col>
-            <v-btn>
-              <v-icon dark>add</v-icon>
-            </v-btn>
 
             <div class="text-center">
               <v-dialog
@@ -82,7 +89,7 @@
                   </v-btn>
                 </template>
 
-                <Create @close-dialog="dialog = false" />
+                <ActionsDialog @close-dialog="dialog = false" />
                 <Comments v-if="false" />
               </v-dialog>
             </div>
@@ -123,23 +130,22 @@
 
 <script>
 import routerMixin from "./mixins/routerMixin";
-import messageMixin from "./mixins/messageMixin";
 import Posts from "./components/posts/Posts";
 import Comments from "./components/posts/comments/Comments";
-import Create from "./components/posts/Create";
+import ActionsDialog from "./components/posts/ActionsDialog";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import Message from "./components/Message";
 export default {
   name: "App",
-  mixins: [routerMixin, messageMixin],
+  mixins: [routerMixin],
   components: {
     Posts,
     Footer,
     SearchBar,
     Message,
     Comments,
-    Create,
+    ActionsDialog,
   },
   data: () => ({
     drawer: false,
@@ -149,6 +155,11 @@ export default {
   }),
   mounted() {
     this.$store.dispatch("getPosts", { type: "all" });
+  },
+  computed: {
+    loading() {
+      return this.$store.getters.getloading;
+    },
   },
   watch: {
     group() {
