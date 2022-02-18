@@ -11,11 +11,14 @@ export default {
         }
     },
     methods: {
-        setMessage(message, type = 'danger') {
+        setMessage(message, type = 'success') {
             this.message = {
                 text: message,
                 type: type
             }
+        },
+        emitMessage(message, type = 'success') {
+            this.$emit('emit-message', message, type)
         }
     },
     watch: {

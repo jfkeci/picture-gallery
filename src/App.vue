@@ -35,38 +35,38 @@
             <v-icon>mdi-heart</v-icon>
           </v-btn>
 
-          <v-btn icon>
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-
-          <template v-slot:extension>
-            <v-tabs align-with-title>
-              <v-tab @click="filter = 'newest'">Newest</v-tab>
-              <v-tab @click="filter = 'popular'">Popular</v-tab>
-              <v-tab @click="filter = 'random'">Random</v-tab>
-              <v-tab @click="filter = 'my'">My</v-tab>
-              <v-tab @click="filter = 'archived'">Archived</v-tab>
-            </v-tabs>
-          </template>
+          <v-btn icon> <v-icon>mdi-dots-vertical</v-icon> </v-btn>
         </v-app-bar>
 
         <v-sheet
           id="scrolling-techniques-3"
           class="overflow-y-auto"
           max-height="100vh"
+          style="padding-top: 20vh"
         >
-          <br /><br />
-          <v-row no-gutters style="margin-top: 15vh">
+          <Message :message="message" />
+          <v-row no-gutters>
             <v-col cols="3">
+              <SearchBar />
               <Posts />
             </v-col>
-            <v-col>
-              <Single />
+            <v-col style="padding: 5vh">
+              <router-view />
             </v-col>
-            <!-- <v-col cols="3">
-              <PostComments />
-            </v-col> -->
+            <v-btn
+              fab
+              dark
+              large
+              color="primary"
+              fixed
+              right
+              bottom
+              style="m-3"
+            >
+              <v-icon dark>add</v-icon>
+            </v-btn>
           </v-row>
+          <Footer />
         </v-sheet>
 
         <v-navigation-drawer v-model="drawer" absolute bottom temporary>
@@ -77,41 +77,44 @@
               style="margin-top: 30vh"
             >
               <v-list-item>
-                <v-list-item-title to="/home">Foo</v-list-item-title>
+                <v-list-item-title @click="goTo('Home')">
+                  Home
+                </v-list-item-title>
               </v-list-item>
 
               <v-list-item>
-                <v-list-item-title to="/home">Bar</v-list-item-title>
+                <v-list-item-title @click="goTo('About')">
+                  About
+                </v-list-item-title>
               </v-list-item>
-
               <v-list-item>
-                <v-list-item-title>Fizz</v-list-item-title>
-              </v-list-item>
-
-              <v-list-item>
-                <v-list-item-title>Buzz</v-list-item-title>
+                <v-list-item-title @click="goTo('Single')">
+                  Single
+                </v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
         </v-navigation-drawer>
       </v-card>
-      <Footer />
-      <v-btn elevation="2" fab large dark class="corner-button"></v-btn>
-      <v-btn elevation="2" fab large dark class="corner-button"></v-btn>
     </div>
   </v-app>
 </template>
 
 <script>
+import routerMixin from "./mixins/routerMixin";
+import messageMixin from "./mixins/messageMixin";
 import Posts from "./components/posts/Posts";
 import Footer from "./components/Footer";
-import Single from "./views/Single";
+import SearchBar from "./components/SearchBar";
+import Message from "./components/Message";
 export default {
   name: "App",
+  mixins: [routerMixin, messageMixin],
   components: {
     Posts,
     Footer,
-    Single,
+    SearchBar,
+    Message,
   },
   data: () => ({
     drawer: false,
@@ -120,6 +123,7 @@ export default {
   }),
   mounted() {
     this.$store.dispatch("getPosts");
+    this.setMessage("Some text danger");
   },
   watch: {
     group() {

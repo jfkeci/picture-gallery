@@ -83,8 +83,5 @@ export default {
       return this.$store.getters.getPostsLoading;
     },
   },
-  created() {
-    console.log(this.post);
-  },
 };
 </script>
