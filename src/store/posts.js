@@ -29,7 +29,10 @@ export default {
         hasPosts: state => state.posts.length > 0,
     },
     actions: {
-        async getPosts(state) {
+        async getPosts(state, param) {
+            if (param.type == 'search') {
+                console.log('filter', param.filter)
+            }
             state.commit('setPostsLoading', true)
             await axios.get(url)
                 .then((res) => {

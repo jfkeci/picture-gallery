@@ -8,6 +8,7 @@
       shaped
       style="margin-top: 5vh"
       max-width="350"
+      :hover="true"
     >
       <v-img
         class="white--text align-end"

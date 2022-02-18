@@ -28,21 +28,24 @@
           <v-spacer></v-spacer>
 
           <v-btn icon>
-            <v-icon>mdi-magnify</v-icon>
-          </v-btn>
-
-          <v-btn icon>
-            <v-icon>mdi-heart</v-icon>
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
 
           <v-btn icon> <v-icon>mdi-dots-vertical</v-icon> </v-btn>
+
+          <template v-slot:extension>
+            <v-tabs align-with-title>
+              <v-tab @click="getPosts('new')">New</v-tab>
+              <v-tab @click="getPosts('new')">Popular</v-tab>
+            </v-tabs>
+          </template>
         </v-app-bar>
 
         <v-sheet
           id="scrolling-techniques-3"
           class="overflow-y-auto"
           max-height="100vh"
-          style="padding-top: 20vh"
+          style="padding-top: 25vh"
         >
           <Message :message="message" />
           <v-row no-gutters>
@@ -53,18 +56,36 @@
             <v-col style="padding: 5vh">
               <router-view />
             </v-col>
-            <v-btn
-              fab
-              dark
-              large
-              color="primary"
-              fixed
-              right
-              bottom
-              style="m-3"
-            >
+            <v-btn>
               <v-icon dark>add</v-icon>
             </v-btn>
+
+            <div class="text-center">
+              <v-dialog
+                v-model="dialog"
+                width="500"
+                content-class="my-custom-dialog"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    fab
+                    light
+                    large
+                    color="primary"
+                    fixed
+                    right
+                    bottom
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </template>
+
+                <Create @close-dialog="dialog = false" />
+                <Comments v-if="false" />
+              </v-dialog>
+            </div>
           </v-row>
           <Footer />
         </v-sheet>
@@ -104,6 +125,8 @@
 import routerMixin from "./mixins/routerMixin";
 import messageMixin from "./mixins/messageMixin";
 import Posts from "./components/posts/Posts";
+import Comments from "./components/posts/comments/Comments";
+import Create from "./components/posts/Create";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import Message from "./components/Message";
@@ -115,15 +138,17 @@ export default {
     Footer,
     SearchBar,
     Message,
+    Comments,
+    Create,
   },
   data: () => ({
     drawer: false,
     group: null,
     filter: "newest",
+    dialog: false,
   }),
   mounted() {
-    this.$store.dispatch("getPosts");
-    this.setMessage("Some text danger");
+    this.$store.dispatch("getPosts", { type: "all" });
   },
   watch: {
     group() {
@@ -140,4 +165,17 @@ export default {
 <style>
 @import "./assets/css/main.css";
 @import "./assets/css/background.css";
+
+.card-outter {
+  padding-bottom: 50px;
+}
+.card-actions {
+  position: absolute;
+  bottom: 0;
+}
+.my-custom-dialog {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 </style>
