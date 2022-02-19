@@ -20,18 +20,30 @@
           </template>
 
           <v-app-bar-nav-icon
-            @click.stop="drawer = !drawer"
+            @click.stop="navDrawer = !navDrawer"
+          ></v-app-bar-nav-icon>
+
+          <v-app-bar-nav-icon
+            @click.stop="postsDrawer = !postsDrawer"
           ></v-app-bar-nav-icon>
 
           <v-app-bar-title>Picture Gallery</v-app-bar-title>
 
           <v-spacer></v-spacer>
 
-          <v-btn icon>
+          <v-btn icon class="mx-2" @click="setAction('create')">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
 
-          <v-btn icon> <v-icon>mdi-dots-vertical</v-icon> </v-btn>
+          <v-btn icon class="mx-3" @click="setAction('login')"> Login </v-btn>
+          <v-btn
+            icon
+            class="mx-3"
+            @click="setAction('register')"
+            style="margin-left: 20px"
+          >
+            Register
+          </v-btn>
 
           <template v-slot:extension>
             <v-tabs align-with-title>
@@ -49,22 +61,24 @@
           max-height="100vh"
           style="padding-top: 30vh"
         >
-          <Message />
-          <v-row justify="center">
-            <v-progress-circular
-              v-if="loading"
-              class="text-xs-center"
-              indeterminate
-              color="purple"
-            ></v-progress-circular>
-          </v-row>
           <v-row no-gutters>
             <v-col cols="3">
               <SearchBar />
               <Posts />
             </v-col>
-            <v-col style="padding: 5vh">
-              <router-view />
+            <v-col class="ml-3 mr-3">
+              <Message />
+              <v-row justify="center">
+                <v-progress-circular
+                  v-if="loading"
+                  class="text-xs-center"
+                  indeterminate
+                  color="purple"
+                ></v-progress-circular>
+              </v-row>
+              <div class="mt-3">
+                <router-view />
+              </div>
             </v-col>
 
             <div class="text-center">
@@ -89,18 +103,17 @@
                   </v-btn>
                 </template>
 
-                <ActionsDialog @close-dialog="dialog = false" />
-                <Comments v-if="false" />
+                <DialogContent />
               </v-dialog>
             </div>
           </v-row>
           <Footer />
         </v-sheet>
 
-        <v-navigation-drawer v-model="drawer" absolute bottom temporary>
+        <v-navigation-drawer v-model="navDrawer" absolute temporary>
           <v-list nav dense>
             <v-list-item-group
-              v-model="group"
+              v-model="navGroup"
               active-class="deep-purple--text text--accent-4"
               style="margin-top: 30vh"
             >
@@ -123,6 +136,22 @@
             </v-list-item-group>
           </v-list>
         </v-navigation-drawer>
+
+        <v-navigation-drawer v-model="postsDrawer" absolute temporary>
+          <v-list nav dense>
+            <v-list-item-group
+              v-model="postsGroup"
+              active-class="deep-purple--text text--accent-4"
+              style="margin-top: 30vh"
+            >
+              <v-list-item>
+                <v-list-item-title @click="goTo('About')">
+                  Posts here
+                </v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-navigation-drawer>
       </v-card>
     </div>
   </v-app>
@@ -131,11 +160,11 @@
 <script>
 import routerMixin from "./mixins/routerMixin";
 import Posts from "./components/posts/Posts";
-import Comments from "./components/posts/comments/Comments";
-import ActionsDialog from "./components/posts/ActionsDialog";
+import DialogContent from "./components/posts/DialogContent";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import Message from "./components/Message";
+
 export default {
   name: "App",
   mixins: [routerMixin],
@@ -144,29 +173,50 @@ export default {
     Footer,
     SearchBar,
     Message,
-    Comments,
-    ActionsDialog,
+    DialogContent,
   },
   data: () => ({
-    drawer: false,
-    group: null,
+    navDrawer: false,
+    postsDrawer: false,
+    navGroup: null,
+    postsGroup: null,
     filter: "newest",
-    dialog: false,
   }),
-  mounted() {
-    this.$store.dispatch("getPosts", { type: "all" });
-  },
   computed: {
     loading() {
-      return this.$store.getters.getloading;
+      return this.$store.getters.getLoading;
+    },
+    action() {
+      return this.$store.getters.getAction;
+    },
+    dialog: {
+      get() {
+        return this.$store.getters.getDialogState;
+      },
+      set(value) {
+        this.$store.commit("setDialogState", value);
+      },
+    },
+  },
+  mounted() {
+    this.$store.dispatch("getPosts", { type: "all" });
+    this.$store.commit("setAction", "register");
+  },
+  methods: {
+    setAction(action) {
+      this.$store.commit("setAction", action);
+      this.$store.commit("showDialog");
+    },
+    closeDialog() {
+      this.$store.commit("hideDialog");
     },
   },
   watch: {
-    group() {
-      this.drawer = false;
+    navGroup() {
+      this.navDrawer = false;
     },
-    filter() {
-      console.log(this.filter);
+    postsGroup() {
+      this.postsDrawer = false;
     },
   },
 };

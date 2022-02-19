@@ -13,18 +13,40 @@ export default new Vuex.Store({
   },
   state: {
     message: false,
-    action: 'show'
+    action: 'show',
+    loading: false,
+    dialog: false
   },
   mutations: {
     setMessage(state, message) {
-      state.message = message
+      state.message = {
+        text: message.text,
+        type: message.type
+      }
+    },
+    resetMessage(state) {
+      state.message = null
     },
     setAction(state, action) {
       state.action = action
+    },
+    setLoading(state, loading) {
+      state.loading = loading
+    },
+    showDialog(state) {
+      state.dialog = true
+    },
+    hideDialog(state) {
+      state.dialog = false
+    },
+    setDialogState(state, value) {
+      state.dialog = value
     }
   },
   getters: {
     getMessage: state => state.message,
-    getAction: state => state.action
+    getAction: state => state.action,
+    getLoading: state => state.loading,
+    getDialogState: state => state.dialog
   }
 })

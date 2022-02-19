@@ -2,19 +2,22 @@ import axios from 'axios'
 let url = 'http://localhost:5001/posts'
 
 export const getPosts = async (state, param) => {
+    state.commit('setLoading', true)
     if (param.type == 'search') {
         console.log('filter', param.filter)
     }
-    state.commit('setloading', true)
     await axios.get(url)
         .then((res) => {
             state.commit('setPosts', res.data)
-            state.commit('setloading', false)
-        }).catch(err => console.log(err))
+            state.commit('setLoading', false)
+        }).catch((error) => {
+            state.commit('setLoading', false)
+            console.log(error)
+        })
 }
 
 export const saveNewPost = async (state, post) => {
-    state.commit('setloading', true)
+    state.commit('setLoading', true)
     await axios.post(url, {
         title: post.title,
         description: post.description,
@@ -22,9 +25,12 @@ export const saveNewPost = async (state, post) => {
         selectedFile: post.selectedFile,
         createdBy: state.getters.getCurrentUser
     }).then((res) => {
-        console.log(res.data)
-        state.commit('setloading', false)
+        console.log(res)
+        state.commit('setLoading', false)
         //state.posts.push(res.data)
+    }).catch((err) => {
+        console.log(err)
+        state.commit('setLoading', false)
     })
 }
 
@@ -39,22 +45,23 @@ export const toggleLike = async (state, post) => {
 
             posts[index] = updatedPost
 
-            console.log(state.getters.getPosts)
             state.commit('setPosts', posts)
-            console.log(state.getters.getPosts)
         }).catch((error) => {
+            state.commit('setLoading', false)
             console.log(error)
         })
 }
 
 export const deletePost = async (state, postId) => {
-    state.commit('setloading', true)
+    state.commit('setLoading', true)
 
     axios.delete(`${url}/${postId}`)
         .then((res) => {
             console.log(res.data)
             state.commit('deletePost', postId)
-            state.commit('setloading', false)
-
+            state.commit('setLoading', false)
+        }).catch((error) => {
+            state.commit('setLoading', false)
+            console.log(error)
         })
 }

@@ -59,7 +59,7 @@ export default {
     },
     testit() {
       this.$store.dispatch("deletePost", this.post._id);
-      this.setMessage("Successfully removed the post " + this.post.title);
+      this.setMessage("Successfully removed the post " + this.post.title, null);
     },
   },
   computed: {

@@ -9,8 +9,6 @@ export default {
                 params['params'] = { urlParam }
             }
 
-            console.log(params)
-
             this.$router.push(params)
         },
         goBack() {

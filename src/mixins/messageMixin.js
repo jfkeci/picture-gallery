@@ -6,21 +6,21 @@ export default {
         Message
     },
     methods: {
-        setMessage(message, type = 'success') {
-            let newMessage = {
-                text: message,
-                type: type
-            }
+        setMessage(message, type) {
+            if (!type) { type = 'success' }
+            let newMessage = { text: message, type: type }
             this.$store.commit('setMessage', newMessage)
         },
-        emitMessage(message, type = 'success') {
-            this.$emit('emit-message', message, type)
+        emitMessage(message, type) {
+            if (!type) { type = 'success' }
+            let newMessage = { text: message, type: type }
+            this.$emit('emit-message', newMessage)
         }
     },
     watch: {
         message: {
             handler: _.debounce(function () {
-                this.$store.commit('setMessage', false)
+                this.$store.commit('resetMessage')
             }, 5000),
             deep: true,
         },

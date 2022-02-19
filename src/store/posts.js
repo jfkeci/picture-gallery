@@ -6,7 +6,6 @@ export default {
     state: {
         currentPost: null,
         posts: [],
-        loading: false
     },
     mutations: {
         setCurrentPost(state, currentPost) {
@@ -17,9 +16,6 @@ export default {
         },
         addPost(state, post) {
             state.posts.push(post)
-        },
-        setloading(state, loading) {
-            state.loading = loading
         },
         updatePost(state, post) {
             let index = state.posts.findIndex((obj => obj._id == post._id))
@@ -32,7 +28,6 @@ export default {
     getters: {
         getCurrentPost: state => state.currentPost,
         getPosts: state => state.posts,
-        getloading: state => state.loading,
         getPostCount: state => state.posts.length,
         hasPosts: state => state.posts.length > 0
     },

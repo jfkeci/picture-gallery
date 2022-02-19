@@ -18,10 +18,5 @@ export default {
       return this.$store.getters.getCurrentPost;
     },
   },
-  watch: {
-    posts() {
-      console.log("inposts", this.posts);
-    },
-  },
 };
 </script>
