@@ -42,27 +42,23 @@ export const getPost = async (state, id) => {
 
 export const saveNewPost = async (state, post) => {
     state.commit('setLoading', true)
-    await axios.post(url, {
-        title: post.title,
-        description: post.description,
-        tags: post.tags.split(','),
-        selectedFile: post.selectedFile,
-        createdBy: state.getters.getCurrentUser
-    }).then((res) => {
-        state.commit('addPost', res.data)
-        state.commit('setLoading', false)
-        state.commit('hideDialog')
-        state.commit('setMessage', {
-            text: 'Successfully saved',
-            type: 'success'
+    await axios.post(url, post)
+        .then((res) => {
+            console.log(res)
+            state.commit('hideDialog')
+            state.commit('addPost', res.data)
+            state.commit('setLoading', false)
+            state.commit('setMessage', {
+                text: 'Successfully saved',
+                type: 'success'
+            })
+        }).catch(() => {
+            state.commit('setLoading', false)
+            state.commit('setMessage', {
+                text: 'Something went wrong',
+                type: 'error'
+            })
         })
-    }).catch(() => {
-        state.commit('setLoading', false)
-        state.commit('setMessage', {
-            text: 'Something went wrong',
-            type: 'error'
-        })
-    })
 }
 
 export const toggleLike = async (state, post) => {

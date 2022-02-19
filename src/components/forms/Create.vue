@@ -30,14 +30,13 @@
             required
           ></v-text-field>
 
-          <v-text-field
-            v-model="selectedFile"
-            label="Selected file"
-            required
-          ></v-text-field>
+          <v-file-input
+            truncate-length="45"
+            accept="image/*"
+            @change="selectFile"
+          ></v-file-input>
         </v-form>
         <hr />
-        <Upload />
         <hr />
       </v-container>
     </v-card-text>
@@ -52,12 +51,8 @@
 </template>
 
 <script>
-import Upload from "../Upload";
 export default {
   name: "Create",
-  components: {
-    Upload,
-  },
   data: () => ({
     valid: true,
     title: "new post title",
@@ -77,16 +72,20 @@ export default {
       (v) => !!v || "Put at least one tag",
       (v) => (v && v.length <= 250) || "Tags must be less than 250 characters",
     ],
-    selectedFile: "https://picsum.photos/1500/1500",
+    selectedFile: "",
   }),
   methods: {
     saveNewPost() {
-      this.$store.dispatch("saveNewPost", {
-        title: this.title,
-        body: this.body,
-        tags: this.tags,
-        selectedFile: this.selectedFile,
-      });
+      let formData = new FormData();
+      formData.append("selectedFile", this.selectedFile);
+      formData.append("title", this.title);
+      formData.append("body", this.body);
+      formData.append("tags", this.tags);
+      this.$store.dispatch("saveNewPost", formData);
+    },
+    selectFile(image) {
+      this.selectedFile = image;
+      console.log(this.selectedFile);
     },
   },
 };
