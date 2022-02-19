@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card
-      v-if="!noPosts && post.selectedFile"
+      v-if="post"
       class="mx-auto"
       elevation="4"
       outlined
@@ -23,7 +23,7 @@
       </v-card-text>
       <pre></pre>
       <v-card-actions>
-        <v-btn color="orange" text @click="likePost">
+        <v-btn color="orange" text @click="toggleLike">
           <v-icon v-if="!isLiked">mdi-thumb-up-outline</v-icon>
           <v-icon v-if="isLiked">mdi-thumb-down-outline</v-icon>
         </v-btn>
@@ -33,13 +33,8 @@
           Delete
         </v-btn>
         <v-btn color="orange" text @click="updatePrompt"> Edit </v-btn>
-        <v-btn v-if="canEdit" color="orange" text @click="showPost">
-          Show
-        </v-btn>
+        <v-btn color="orange" text @click="showPost"> Show </v-btn>
         <v-divider class="mx-4"></v-divider>
-        <pre>
-          {{ isLiked }}
-        </pre>
       </v-card-actions>
       <br />
       <br />
@@ -57,12 +52,9 @@ export default {
       required: true,
       type: Object,
     },
-    noPosts: {
-      default: false,
-    },
   },
   methods: {
-    likePost() {
+    toggleLike() {
       this.$store.dispatch("toggleLike", this.post);
     },
     deletePrompt() {
@@ -76,8 +68,13 @@ export default {
       this.$store.commit("showDialog");
     },
     showPost() {
-      this.$store.commit("setCurrentPost", this.post);
-      this.goTo("Single");
+      console.log(this.$route.params.id);
+      console.log(this.post._id);
+      console.log(this.$route.params.id != this.post._id);
+      if (this.$route.params.id != this.post._id) {
+        this.$store.commit("setCurrentPost", this.post);
+        this.goTo("post", this.post._id);
+      }
     },
   },
   computed: {
@@ -91,7 +88,15 @@ export default {
       return this.post.createdBy == this.user;
     },
     isLiked() {
-      return this.post.likes.includes(this.user);
+      return this.post.likes.includes(this.$store.getters.getCurrentUser);
+    },
+  },
+  watch: {
+    posts: {
+      handler(val) {
+        console.log("@like", val);
+      },
+      deep: true,
     },
   },
 };

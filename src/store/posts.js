@@ -30,6 +30,10 @@ export default {
         },
         addComment(state, comment) {
             state.currentPost.comments.push(comment)
+        },
+        replacePost(state, post) {
+            let index = state.posts.findIndex((item => item._id == post._id));
+            state.posts[index] = post
         }
     },
     getters: {
@@ -37,7 +41,7 @@ export default {
         getDialogPost: state => state.dialogPost,
         getPosts: state => state.posts,
         getPostCount: state => state.posts.length,
-        hasPosts: state => state.posts.length > 0
+        hasPosts: state => state.posts.length > 0,
     },
     actions: {
         getPosts,

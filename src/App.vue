@@ -100,19 +100,14 @@
               style="margin-top: 30vh"
             >
               <v-list-item>
-                <v-list-item-title @click="goTo('Home')">
+                <v-list-item-title @click="goTo('home')">
                   Home
                 </v-list-item-title>
               </v-list-item>
 
               <v-list-item>
-                <v-list-item-title @click="goTo('About')">
+                <v-list-item-title @click="goTo('about')">
                   About
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title @click="goTo('Single')">
-                  Single
                 </v-list-item-title>
               </v-list-item>
             </v-list-item-group>
@@ -127,7 +122,7 @@
               style="margin-top: 30vh"
             >
               <v-list-item>
-                <v-list-item-title @click="goTo('About')">
+                <v-list-item-title @click="goTo('about')">
                   Posts here
                 </v-list-item-title>
               </v-list-item>

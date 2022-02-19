@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 export const getPosts = async (state, param) => {
-    console.log(process.env.VUE_APP_BASE_URL)
     state.commit('setLoading', true)
     if (param.type == 'search') {
         console.log('filter', param.filter)
@@ -83,19 +82,12 @@ export const updatePost = async (state, post) => {
 }
 
 export const toggleLike = async (state, post) => {
+    state.commit('setLoading', false)
     await axios.patch(`/posts/like/${post._id}/${state.getters.getCurrentUser}`)
         .then((res) => {
             let updatedPost = res.data
-
-            let posts = state.getters.getPosts;
-
-            let index = posts.indexOf(post)
-
-            posts[index] = updatedPost
-
-            state.commit('setPosts', posts)
+            state.commit('replacePost', updatedPost)
         }).catch((error) => {
-            state.commit('setLoading', false)
             console.log(error)
         })
 }
