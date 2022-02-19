@@ -4,7 +4,7 @@
       height="200px"
       :src="
         action == 'delete-post'
-          ? post.selectedFile
+          ? $apiUrl + post.selectedFile
           : 'https://picsum.photos/1500/1500'
       "
     >

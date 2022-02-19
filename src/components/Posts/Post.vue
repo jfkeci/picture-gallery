@@ -13,7 +13,7 @@
       <v-img
         class="white--text align-end"
         height="300px"
-        :src="post.selectedFile"
+        :src="$apiUrl + post.selectedFile"
       >
         <v-card-title>{{ post.title }}</v-card-title>
       </v-img>
@@ -32,9 +32,7 @@
         <v-btn v-if="canEdit" color="orange" text @click="deletePrompt">
           Delete
         </v-btn>
-        <v-btn v-if="canEdit" color="orange" text @click="updatePrompt">
-          Edit
-        </v-btn>
+        <v-btn color="orange" text @click="updatePrompt"> Edit </v-btn>
         <v-btn v-if="canEdit" color="orange" text @click="showPost">
           Show
         </v-btn>

@@ -61,6 +61,27 @@ export const saveNewPost = async (state, post) => {
         })
 }
 
+export const updatePost = async (state, post) => {
+    state.commit('setLoading', true)
+    await axios.patch(`/posts/${post._id}`, post)
+        .then((res) => {
+            console.log(res)
+            state.commit('hideDialog')
+            // state.commit('replacePost', res.data)
+            state.commit('setLoading', false)
+            state.commit('setMessage', {
+                text: 'Successfully updated',
+                type: 'success'
+            })
+        }).catch(() => {
+            state.commit('setLoading', false)
+            state.commit('setMessage', {
+                text: 'Something went wrong',
+                type: 'error'
+            })
+        })
+}
+
 export const toggleLike = async (state, post) => {
     await axios.patch(`/posts/like/${post._id}/${state.getters.getCurrentUser}`)
         .then((res) => {

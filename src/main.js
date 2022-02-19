@@ -11,7 +11,10 @@ Vue.mixin(messageMixin)
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://localhost:5001/'
+let url = 'http://localhost:5001/'
+axios.defaults.baseURL = url
+
+Vue.prototype.$apiUrl = url
 
 new Vue({
   router,

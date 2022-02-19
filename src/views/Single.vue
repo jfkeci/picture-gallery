@@ -3,7 +3,7 @@
     <v-card class="mx-auto my-5" elevation="4" outlined shaped max-width="80vh">
       <v-img
         class="white--text align-end"
-        :src="post.selectedFile"
+        :src="$apiUrl + post.selectedFile"
         height="50vh"
         width="80vh"
       >

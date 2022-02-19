@@ -29,12 +29,6 @@
             label="Tags"
             required
           ></v-text-field>
-
-          <v-text-field
-            v-model="selectedFile"
-            label="Selected file"
-            required
-          ></v-text-field>
         </v-form>
       </v-container>
     </v-card-text>
@@ -43,7 +37,7 @@
       <v-btn color="blue darken-1" text @click="$store.commit('hideDialog')">
         Close
       </v-btn>
-      <v-btn color="blue darken-1" text @click="saveNewPost"> Save </v-btn>
+      <v-btn color="blue darken-1" text @click="updatePost"> Update </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -53,33 +47,41 @@ export default {
   name: "Update",
   data: () => ({
     valid: true,
-    title: "new post title",
+    title: "",
     titleRules: [
       (v) => !!v || "Title is required",
       (v) => (v && v.length <= 100) || "Title must be less than 100 characters",
     ],
-    body: "new post title",
+    body: "",
     bodyRules: [
       (v) => !!v || "Description is required",
       (v) =>
         (v && v.length <= 250) ||
         "Description must be less than 250 characters",
     ],
-    tags: "new post title",
+    tags: "",
     tagsRules: [
       (v) => !!v || "Put at least one tag",
       (v) => (v && v.length <= 250) || "Tags must be less than 250 characters",
     ],
-    selectedFile: "https://picsum.photos/1500/1500",
   }),
+  computed: {
+    post() {
+      return this.$store.getters.getDialogPost;
+    },
+  },
+  created() {
+    this.title = this.post.title;
+    this.body = this.post.body;
+    this.tags = this.post.tags.join(",");
+  },
   methods: {
-    saveNewPost() {
-      this.$store.dispatch("saveNewPost", {
-        title: this.title,
-        body: this.body,
-        tags: this.tags,
-        selectedFile: this.selectedFile,
-      });
+    updatePost() {
+      let post = this.post;
+      post.title = this.title;
+      post.body = this.body;
+      post.tags = this.tags;
+      this.$store.dispatch("updatePost", post);
     },
   },
 };

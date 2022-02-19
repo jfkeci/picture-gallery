@@ -1,5 +1,5 @@
 
-import { getPosts, saveNewPost, toggleLike, getPost, deletePost } from '../reducers/api.js'
+import { getPosts, saveNewPost, updatePost, toggleLike, getPost, deletePost } from '../reducers/api.js'
 import { commentPost, deleteComment, updateComment } from '../reducers/api.js'
 
 export default {
@@ -42,6 +42,7 @@ export default {
     actions: {
         getPosts,
         saveNewPost,
+        updatePost,
         toggleLike,
         deletePost,
         getPost,
