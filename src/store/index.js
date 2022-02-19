@@ -15,7 +15,8 @@ export default new Vuex.Store({
     message: false,
     action: 'show',
     loading: false,
-    dialog: false
+    dialog: false,
+    dialogComment: null,
   },
   mutations: {
     setMessage(state, message) {
@@ -41,12 +42,16 @@ export default new Vuex.Store({
     },
     setDialogState(state, value) {
       state.dialog = value
+    },
+    setDialogComment(state, comment) {
+      state.dialogComment = comment
     }
   },
   getters: {
     getMessage: state => state.message,
     getAction: state => state.action,
     getLoading: state => state.loading,
-    getDialogState: state => state.dialog
+    getDialogState: state => state.dialog,
+    getDialogComment: state => state.dialogComment
   }
 })

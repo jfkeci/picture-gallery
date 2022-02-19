@@ -10,12 +10,12 @@ export const registerUser = async (state, user) => {
         password: user.password,
         confirmPassword: user.confirmPassword,
     }).then((res) => {
-        console.log(res)
         state.commit('setMessage', {
-            text: 'Successfully registered',
+            text: 'Successfully registered ' + res.data.user.name,
             type: 'success'
         })
         state.commit('setLoading', false)
+        state.commit('hideDialog')
     }).catch(err => {
         state.commit('setLoading', false)
         switch (err.response.status) {
@@ -50,21 +50,6 @@ export const loginUser = async (state, user) => {
             type: 'success'
         })
         state.commit('setLoading', false)
-    }).catch(err => {
-        state.commit('setLoading', false)
-        switch (err.response.status) {
-            case 400 || 404:
-                state.commit('setMessage', {
-                    text: err.response.data.message,
-                    type: 'error'
-                })
-                break;
-            default:
-                state.commit('setMessage', {
-                    text: 'Something went wrong',
-                    type: 'error'
-                })
-                break;
-        }
+        state.commit('hideDialog')
     })
 }

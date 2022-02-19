@@ -1,40 +1,56 @@
 <template>
-  <div style="height: 100vh">
-    <v-card
-      class="mx-auto"
-      elevation="4"
-      outlined
-      shaped
-      height="70vh"
-      max-width="80vh"
-    >
+  <div style="height: 70vh; overflow-y: auto; overflow-x: hidden" v-if="post">
+    <v-card class="mx-auto my-5" elevation="4" outlined shaped max-width="80vh">
       <v-img
         class="white--text align-end"
-        src="https://picsum.photos/1500/1500"
+        :src="post.selectedFile"
         height="50vh"
         width="80vh"
       >
-        <v-card-title>Post title</v-card-title>
+        <v-card-title>{{ post.title }}</v-card-title>
       </v-img>
-
-      <v-card-subtitle class="pb-0"> Number 10 </v-card-subtitle>
 
       <v-card-text class="text--primary">
         <div>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+          {{ post.body }}
         </div>
       </v-card-text>
 
-      <v-card-actions>
-        <v-btn color="orange" text> Share </v-btn>
-
-        <v-btn color="orange" text> Explore </v-btn>
-      </v-card-actions>
-      <br />
-      <br />
+      <Comments :post="post" @update-comments="getPost" />
     </v-card>
   </div>
 </template>
+
+<script>
+import Comments from "../components/posts/comments/Comments";
+export default {
+  name: "Single",
+  components: {
+    Comments,
+  },
+  created() {
+    this.getPost();
+  },
+  computed: {
+    id() {
+      return this.$route.params.id || null;
+    },
+    post() {
+      return this.$store.getters.getCurrentPost;
+    },
+  },
+  methods: {
+    getPost() {
+      if (this.id) {
+        this.$store.commit("setLoading", true);
+        this.$store.dispatch("getPost", this.id);
+      } else {
+        this.$store.commit("setMessage", {
+          text: "No id parameter set",
+          type: "error",
+        });
+      }
+    },
+  },
+};
+</script>

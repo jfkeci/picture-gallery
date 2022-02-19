@@ -23,9 +23,9 @@ export default {
     };
   },
   watch: {
-    search(val) {
+    /* search(val) {
       this.getItems(val);
-    },
+    }, */
   },
   methods: {
     getItems(filter) {

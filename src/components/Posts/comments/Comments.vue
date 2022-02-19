@@ -1,83 +1,120 @@
 <template>
-  <v-container>
-    <v-row justify="space-around">
-      <v-card>
-        <v-img
-          height="200px"
-          src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg"
+  <v-card-text>
+    <div v-if="comments">
+      <div class="font-weight-bold ml-8 mb-2">Comments</div>
+
+      <v-timeline align-top dense v-if="hasComments">
+        <v-timeline-item
+          v-for="item in comments"
+          :key="item._id"
+          color="deep-purple lighten-1"
+          small
         >
-          <v-app-bar flat color="rgba(0, 0, 0, 0)">
-            <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
-
-            <v-toolbar-title class="text-h6 white--text pl-0">
-              Messages
-            </v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-            <v-btn color="white" icon>
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </v-app-bar>
-
-          <v-card-title class="white--text mt-8">
-            <v-avatar size="56">
-              <img
-                alt="user"
-                src="https://cdn.pixabay.com/photo/2020/06/24/19/12/cabbage-5337431_1280.jpg"
-              />
-            </v-avatar>
-            <p class="ml-3">John Doe</p>
-          </v-card-title>
-        </v-img>
-
-        <v-card-text>
-          <div class="font-weight-bold ml-8 mb-2">Today</div>
-
-          <v-timeline align-top dense>
-            <v-timeline-item
-              v-for="message in messages"
-              :key="message.time"
-              :color="message.color"
-              small
-            >
-              <div>
-                <div class="font-weight-normal">
-                  <strong>{{ message.from }}</strong> @{{ message.time }}
-                </div>
-                <div>{{ message.message }}</div>
-              </div>
-            </v-timeline-item>
-          </v-timeline>
-        </v-card-text>
-      </v-card>
-    </v-row>
-  </v-container>
+          <div>
+            <div class="font-weight-normal">
+              <strong>{{ item.createdUsername }}</strong>
+              @{{ item.createdAt }}
+            </div>
+            <div>{{ item.text }}</div>
+            <div v-if="item.createdBy == user">
+              <v-btn class="mx-2" @click="editComment(item)">Update</v-btn>
+              <v-btn class="mx-2" @click="deletePrompt(item)">Delete</v-btn>
+            </div>
+          </div>
+        </v-timeline-item>
+      </v-timeline>
+      <v-timeline align-top dense v-if="!hasComments">
+        <v-timeline-item color="deep-purple lighten-1" small>
+          <div>
+            <div class="font-weight-normal">
+              <strong>Leave a comment</strong>
+            </div>
+          </div>
+        </v-timeline-item>
+      </v-timeline>
+    </div>
+    <div>
+      <v-divider class="my-3 mx-3"></v-divider>
+      <v-text-field
+        v-model="comment"
+        :counter="250"
+        :rules="commentRules"
+        label="Comment"
+        required
+      ></v-text-field>
+      <v-divider class="my-3"></v-divider>
+      <v-btn v-if="!editing" @click="addNewComment">Comment</v-btn>
+      <v-btn v-if="editing" @click="updateComment">Update</v-btn>
+    </div>
+  </v-card-text>
 </template>
 
 <script>
 export default {
+  name: "Comments",
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    comments() {
+      return this.post.comments;
+    },
+    hasComments() {
+      return this.comments.length > 0;
+    },
+    user() {
+      return this.$store.getters.getCurrentUser;
+    },
+  },
   data: () => ({
-    messages: [
-      {
-        from: "You",
-        message: `Sure, I'll see you later.`,
-        time: "10:42am",
-        color: "deep-purple lighten-1",
-      },
-      {
-        from: "John Doe",
-        message: "Yeah, sure. Does 1:00pm work?",
-        time: "10:37am",
-        color: "green",
-      },
-      {
-        from: "You",
-        message: "Did you still want to grab lunch today?",
-        time: "9:47am",
-        color: "deep-purple lighten-1",
-      },
+    comment: "New comment,",
+    commentRules: [
+      (v) => (v && v.length > 2) || "Write something",
+      (v) =>
+        (v && v.length <= 250) || "Comment must be less than 250 characters",
     ],
+    editing: false,
+    commentToEdit: null,
   }),
+  methods: {
+    createdByYou(item) {
+      return item.createdBy == this.user;
+    },
+    addNewComment() {
+      if (this.comment.length < 2) return;
+
+      this.$store.commit("setLoading", true);
+      let newComment = {
+        postId: this.post._id,
+        text: this.comment,
+        createdBy: this.$store.getters.getCurrentUser,
+      };
+      this.$store.dispatch("commentPost", newComment);
+      this.comment = "";
+    },
+    deletePrompt(comment) {
+      console.log("@comments", this.post._id);
+      comment["postId"] = this.post._id;
+      this.$store.commit("setDialogComment", comment);
+      this.$store.commit("setAction", "delete-comment");
+      this.$store.commit("showDialog");
+    },
+    editComment(comment) {
+      console.log("@comments", this.post._id);
+      comment["postId"] = this.post._id;
+      this.commentToEdit = comment;
+      this.comment = this.commentToEdit.text;
+      this.editing = true;
+    },
+    updateComment() {
+      this.commentToEdit.text = this.comment;
+      console.log(this.commentToEdit);
+      this.$store.dispatch("updateComment", this.commentToEdit);
+      this.comment = "";
+    },
+  },
 };
 </script>

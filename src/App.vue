@@ -45,14 +45,12 @@
             Register
           </v-btn>
 
-          <template v-slot:extension>
+          <!-- <template v-slot:extension>
             <v-tabs align-with-title>
-              <!-- <v-tab @click="getPosts('new')">New</v-tab>
-              <v-tab @click="getPosts('popular')">Popular</v-tab> -->
-              <v-tab>New</v-tab>
-              <v-tab>Popular</v-tab>
+              <v-tab @click="getPosts('new')">New</v-tab>
+              <v-tab @click="getPosts('popular')">Popular</v-tab>
             </v-tabs>
-          </template>
+          </template> -->
         </v-app-bar>
 
         <v-sheet
@@ -87,22 +85,6 @@
                 width="500"
                 content-class="my-custom-dialog"
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    fab
-                    light
-                    large
-                    color="primary"
-                    fixed
-                    right
-                    bottom
-                  >
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-                </template>
-
                 <DialogContent />
               </v-dialog>
             </div>
@@ -200,7 +182,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getPosts", { type: "all" });
-    this.$store.commit("setAction", "register");
+    /* this.$store.commit("setAction", "create");
+    this.$store.commit("showDialog"); */
   },
   methods: {
     setAction(action) {

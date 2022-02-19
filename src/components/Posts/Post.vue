@@ -24,16 +24,24 @@
       <pre></pre>
       <v-card-actions>
         <v-btn color="orange" text @click="likePost">
-          <v-icon>mdi-thumb-up-outline</v-icon>
-          <v-icon>mdi-thumb-down-outline</v-icon>
+          <v-icon v-if="!isLiked">mdi-thumb-up-outline</v-icon>
+          <v-icon v-if="isLiked">mdi-thumb-down-outline</v-icon>
         </v-btn>
+
+        <v-divider class="mx-4"></v-divider>
+        <v-btn v-if="canEdit" color="orange" text @click="deletePrompt">
+          Delete
+        </v-btn>
+        <v-btn v-if="canEdit" color="orange" text @click="updatePrompt">
+          Edit
+        </v-btn>
+        <v-btn v-if="canEdit" color="orange" text @click="showPost">
+          Show
+        </v-btn>
+        <v-divider class="mx-4"></v-divider>
         <pre>
           {{ isLiked }}
         </pre>
-        <v-btn color="orange" text v-if="post.createdBy == this.user">
-          Delete
-        </v-btn>
-        <v-btn @click="testit">testit</v-btn>
       </v-card-actions>
       <br />
       <br />
@@ -42,8 +50,10 @@
 </template>
 
 <script>
+import routerMixin from "../../mixins/routerMixin";
 export default {
   name: "Post",
+  mixins: [routerMixin],
   props: {
     post: {
       required: true,
@@ -57,9 +67,19 @@ export default {
     likePost() {
       this.$store.dispatch("toggleLike", this.post);
     },
-    testit() {
-      this.$store.dispatch("deletePost", this.post._id);
-      this.setMessage("Successfully removed the post " + this.post.title, null);
+    deletePrompt() {
+      this.$store.commit("setAction", "delete-post");
+      this.$store.commit("setDialogPost", this.post);
+      this.$store.commit("showDialog");
+    },
+    updatePrompt() {
+      this.$store.commit("setAction", "update");
+      this.$store.commit("setDialogPost", this.post);
+      this.$store.commit("showDialog");
+    },
+    showPost() {
+      this.$store.commit("setCurrentPost", this.post);
+      this.goTo("Single");
     },
   },
   computed: {
@@ -69,11 +89,11 @@ export default {
     user() {
       return this.$store.getters.getCurrentUser;
     },
+    canEdit() {
+      return this.post.createdBy == this.user;
+    },
     isLiked() {
-      let posts = this.$store.getters.getPosts;
-      let post = posts.filter((post) => post._id == this.post._id);
-      console.log(post[0]["_id"] == this.user);
-      return true;
+      return this.post.likes.includes(this.user);
     },
   },
 };

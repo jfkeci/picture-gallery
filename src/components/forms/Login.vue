@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: "Register",
+  name: "Login",
   data: () => ({
     valid: true,
     email: "iivanovic@mail.com",
