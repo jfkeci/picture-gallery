@@ -1,12 +1,12 @@
 import axios from 'axios'
-let url = 'http://localhost:5001/posts'
 
 export const getPosts = async (state, param) => {
+    console.log(process.env.VUE_APP_BASE_URL)
     state.commit('setLoading', true)
     if (param.type == 'search') {
         console.log('filter', param.filter)
     }
-    await axios.get(url)
+    await axios.get('/posts')
         .then((res) => {
             state.commit('setPosts', res.data)
             state.commit('setLoading', false)
@@ -17,7 +17,7 @@ export const getPosts = async (state, param) => {
 }
 
 export const getPost = async (state, id) => {
-    await axios.get(`${url}/${id}`)
+    await axios.get(`/posts/${id}`)
         .then((res) => {
             state.commit('setCurrentPost', res.data)
             state.commit('setLoading', false)
@@ -42,7 +42,7 @@ export const getPost = async (state, id) => {
 
 export const saveNewPost = async (state, post) => {
     state.commit('setLoading', true)
-    await axios.post(url, post)
+    await axios.post('/posts', post)
         .then((res) => {
             console.log(res)
             state.commit('hideDialog')
@@ -62,7 +62,7 @@ export const saveNewPost = async (state, post) => {
 }
 
 export const toggleLike = async (state, post) => {
-    await axios.patch(`${url}/like/${post._id}/${state.getters.getCurrentUser}`)
+    await axios.patch(`/posts/like/${post._id}/${state.getters.getCurrentUser}`)
         .then((res) => {
             let updatedPost = res.data
 
@@ -82,7 +82,7 @@ export const toggleLike = async (state, post) => {
 export const deletePost = async (state, postId) => {
     state.commit('setLoading', true)
 
-    await axios.delete(`${url}/${postId}`)
+    await axios.delete(`/posts/${postId}`)
         .then(() => {
             state.commit('deletePost', postId)
             state.commit('setLoading', false)
@@ -108,7 +108,7 @@ export const deletePost = async (state, postId) => {
 }
 
 export const commentPost = async (state, comment) => {
-    await axios.post(`http://localhost:5001/comments/${comment.postId}`, {
+    await axios.post(`/comments/${comment.postId}`, {
         text: comment.text,
         createdBy: comment.createdBy
     }).then((res) => {
@@ -136,7 +136,7 @@ export const commentPost = async (state, comment) => {
 }
 
 export const deleteComment = async (state, comment) => {
-    await axios.delete(`http://localhost:5001/comments/${comment.postId}/${comment._id}`)
+    await axios.delete(`/comments/${comment.postId}/${comment._id}`)
         .then((res) => {
             state.commit('setCurrentPost', res.data.post)
             state.commit('setLoading', false)
@@ -162,7 +162,7 @@ export const deleteComment = async (state, comment) => {
 }
 
 export const updateComment = async (state, comment) => {
-    await axios.patch(`http://localhost:5001/comments/${comment.postId}/${comment._id}`, {
+    await axios.patch(`/comments/${comment.postId}/${comment._id}`, {
         text: comment.text
     }).then((res) => {
         state.commit('setCurrentPost', res.data.post)

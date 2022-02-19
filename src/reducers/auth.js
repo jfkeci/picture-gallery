@@ -1,9 +1,8 @@
 import axios from 'axios'
-let url = 'http://localhost:5001/user'
 
 export const registerUser = async (state, user) => {
     state.commit('setLoading', true)
-    axios.post(`${url}/register`, {
+    axios.post(`/user/register`, {
         name: user.name,
         surname: user.surname,
         email: user.email,
@@ -36,7 +35,7 @@ export const registerUser = async (state, user) => {
 }
 
 export const loginUser = async (state, user) => {
-    axios.post(`${url}/login`, {
+    axios.post(`/user/login`, {
         email: user.email,
         password: user.password,
     }).then((res) => {
