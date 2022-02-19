@@ -36,6 +36,9 @@
             required
           ></v-text-field>
         </v-form>
+        <hr />
+        <Upload />
+        <hr />
       </v-container>
     </v-card-text>
     <v-card-actions>
@@ -49,8 +52,12 @@
 </template>
 
 <script>
+import Upload from "../Upload";
 export default {
   name: "Create",
+  components: {
+    Upload,
+  },
   data: () => ({
     valid: true,
     title: "new post title",
