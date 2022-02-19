@@ -85,7 +85,6 @@ export default {
     },
     selectFile(image) {
       this.selectedFile = image;
-      console.log(this.selectedFile);
     },
   },
 };

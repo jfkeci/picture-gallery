@@ -96,14 +96,12 @@ export default {
       this.comment = "";
     },
     deletePrompt(comment) {
-      console.log("@comments", this.post._id);
       comment["postId"] = this.post._id;
       this.$store.commit("setDialogComment", comment);
       this.$store.commit("setAction", "delete-comment");
       this.$store.commit("showDialog");
     },
     editComment(comment) {
-      console.log("@comments", this.post._id);
       comment["postId"] = this.post._id;
       this.commentToEdit = comment;
       this.comment = this.commentToEdit.text;
@@ -111,7 +109,6 @@ export default {
     },
     updateComment() {
       this.commentToEdit.text = this.comment;
-      console.log(this.commentToEdit);
       this.$store.dispatch("updateComment", this.commentToEdit);
       this.comment = "";
       this.editing = false;
