@@ -114,6 +114,7 @@ export default {
       console.log(this.commentToEdit);
       this.$store.dispatch("updateComment", this.commentToEdit);
       this.comment = "";
+      this.editing = false;
     },
   },
 };
