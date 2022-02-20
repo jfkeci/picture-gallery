@@ -1,10 +1,7 @@
 import axios from 'axios'
 
-export const getPosts = async (state, param) => {
+export const getPosts = async (state) => {
     state.commit('setLoading', true)
-    if (param.type == 'search') {
-        console.log('filter', param.filter)
-    }
     await axios.get('/posts')
         .then((res) => {
             state.commit('setPosts', res.data)
@@ -98,8 +95,6 @@ export const toggleLike = async (state, post) => {
 }
 
 export const deletePost = async (state, postId) => {
-
-
     state.commit('setLoading', true)
 
     await axios.delete(`/posts/${postId}`)
@@ -124,5 +119,15 @@ export const deletePost = async (state, postId) => {
                     })
                     break;
             }
+        })
+}
+
+export const searchPosts = async (state, filter) => {
+    await axios.get('/posts/search?filter=' + filter)
+        .then((res) => {
+            state.commit('setSearchResults', res.data)
+            console.log(filter, res.data)
+        }).catch((error) => {
+            console.log(error)
         })
 }

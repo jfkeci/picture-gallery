@@ -1,6 +1,13 @@
 <template>
-  <div style="overflow-y: auto; overflow-x: hidden" v-if="post">
-    <v-card class="mx-auto my-5" elevation="4" outlined shaped max-width="60vw">
+  <div style="overflow-y: auto; overflow-x: hidden">
+    <v-card
+      v-if="isLoggedIn && post"
+      class="mx-auto my-5"
+      elevation="4"
+      outlined
+      shaped
+      max-width="60vw"
+    >
       <v-img class="white--text align-end" :src="$apiUrl + post.selectedFile">
         <v-card-title>{{ post.title }}</v-card-title>
       </v-img>
@@ -13,6 +20,9 @@
 
       <Comments :post="post" @update-comments="getPost" />
     </v-card>
+    <div v-if="!isLoggedIn" class="my-3">
+      <h1>Log in to show single post</h1>
+    </div>
   </div>
 </template>
 
@@ -24,7 +34,12 @@ export default {
     Comments,
   },
   created() {
-    this.getPost();
+    if (this.isLoggedIn) {
+      this.getPost();
+    } else {
+      this.$store.commit("setAction", "login");
+      this.$store.commit("showDialog");
+    }
   },
   computed: {
     id() {
@@ -32,6 +47,9 @@ export default {
     },
     post() {
       return this.$store.getters.getCurrentPost;
+    },
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
     },
   },
   methods: {

@@ -127,7 +127,6 @@
         >
           <v-list nav dense>
             <SearchBar />
-            <Posts />
           </v-list>
         </v-navigation-drawer>
       </v-card>

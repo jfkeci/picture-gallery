@@ -76,6 +76,20 @@ export default {
   }),
   methods: {
     saveNewPost() {
+      if (!this.valid) {
+        this.$store.commit("setMessage", {
+          text: "Please write something",
+          type: "warning",
+        });
+        return;
+      }
+      if (this.selectedFile.length < 2) {
+        this.$store.commit("setMessage", {
+          text: "Please select a file",
+          type: "warning",
+        });
+        return;
+      }
       let formData = new FormData();
       formData.append("selectedFile", this.selectedFile);
       formData.append("title", this.title);
