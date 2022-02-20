@@ -23,16 +23,12 @@
             @click.stop="navDrawer = !navDrawer"
           ></v-app-bar-nav-icon>
 
-          <v-app-bar-nav-icon
-            @click.stop="postsDrawer = !postsDrawer"
-          ></v-app-bar-nav-icon>
-
           <v-app-bar-title>Picture Gallery</v-app-bar-title>
 
           <v-spacer></v-spacer>
 
-          <v-btn icon class="mx-5">
-            {{ user }}
+          <v-btn icon class="mx-2" @click.stop="postsDrawer = !postsDrawer">
+            <v-icon>mdi-magnify</v-icon>
           </v-btn>
 
           <v-btn icon class="mx-2" @click="setAction('create')">
@@ -40,18 +36,18 @@
           </v-btn>
 
           <v-btn
-            v-if="!loginCheck"
+            v-if="!isLoggedIn"
             icon
             class="mx-3"
             @click="setAction('login')"
           >
             Login
           </v-btn>
-          <v-btn v-if="loginCheck" icon class="mx-3" @click="logout">
+          <v-btn v-if="isLoggedIn" icon class="mx-3" @click="logout">
             Logout
           </v-btn>
           <v-btn
-            v-if="!loginCheck"
+            v-if="!isLoggedIn"
             icon
             class="mx-3"
             @click="setAction('register')"
@@ -109,7 +105,6 @@
         <v-navigation-drawer v-model="navDrawer" absolute temporary>
           <v-list nav dense>
             <v-list-item-group
-              v-model="navGroup"
               active-class="deep-purple--text text--accent-4"
               style="margin-top: 20vh"
             >
@@ -147,7 +142,7 @@
 <script>
 import routerMixin from "./mixins/routerMixin";
 import Posts from "./components/posts/Posts";
-import DialogContent from "./components/posts/DialogContent";
+import DialogContent from "./components/DialogContent";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import Message from "./components/Message";
@@ -165,19 +160,15 @@ export default {
   data: () => ({
     navDrawer: false,
     postsDrawer: false,
-    navGroup: null,
     postsGroup: null,
     filter: "newest",
   }),
   computed: {
-    loginCheck() {
-      return localStorage.getItem("user") === null;
-    },
     loading() {
       return this.$store.getters.getLoading;
     },
-    action() {
-      return this.$store.getters.getAction;
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
     },
     user() {
       return this.$store.getters.getUser;
@@ -193,8 +184,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getPosts", { type: "all" });
-    /* this.$store.commit("setAction", "create");
-    this.$store.commit("showDialog"); */
   },
   methods: {
     setAction(action) {
@@ -205,14 +194,11 @@ export default {
       this.$store.commit("hideDialog");
     },
     logout() {
-      localStorage.setItem("user", null);
+      this.$store.commit("logout");
       location.reload();
     },
   },
   watch: {
-    navGroup() {
-      this.navDrawer = false;
-    },
     postsGroup() {
       this.postsDrawer = false;
     },

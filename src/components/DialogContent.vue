@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Comments v-if="action == 'showComments'" />
+    <Comments v-if="action == 'show-comments'" />
     <Login v-if="action == 'login'" />
     <Register v-if="action == 'register'" />
     <Create v-if="action == 'create'" />
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import Login from "../forms/Login";
-import Register from "../forms/Register";
-import Create from "../forms/Create";
-import Delete from "../forms/Delete";
-import Update from "../forms/Update";
+import Login from "./forms/Login";
+import Register from "./forms/Register";
+import Create from "./forms/Create";
+import Delete from "./forms/Delete";
+import Update from "./forms/Update";
 import Comments from "./comments/Comments";
 export default {
   name: "DialogContent",

@@ -2,11 +2,10 @@
   <div>
     <v-card
       v-if="post"
-      class="mx-auto"
+      class="mx-auto my-5"
       elevation="4"
       outlined
       shaped
-      style="margin-top: 5vh"
       max-width="350"
       :hover="true"
     >
