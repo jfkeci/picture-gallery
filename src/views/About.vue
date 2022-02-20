@@ -1,5 +1,14 @@
 <template>
-  <div class="about">
-    <h1>This is the about page</h1>
+  <div>
+    <iframe
+      src="https://infallible-lalande-6f74b6.netlify.app/?viewer=pdf&file="
+      frameborder="0"
+    ></iframe>
   </div>
 </template>
+
+<script>
+export default {
+  name: "About",
+};
+</script>
