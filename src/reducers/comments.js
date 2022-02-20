@@ -4,6 +4,7 @@ export const commentPost = async (state, comment) => {
     if (!state.getters.isLoggedIn) {
         state.commit('setAction', 'login');
         state.commit('showDialog')
+        state.commit('setLoading', false)
         return;
     }
     await axios.post(`/comments/${comment.postId}`, {

@@ -1,11 +1,42 @@
 # Picture gallery
 
-## Setup
+## Github
+https://github.com/jfkeci
 
-### updated
 
-here is a list
-- nodel1
-    - node1l2
-    - node2l2
-        - node1l3
+### App
+https://github.com/jfkeci/picture-gallery
+
+
+### API
+https://github.com/jfkeci/picture-gallery-api
+
+
+
+
+## Local setup
+
+
+### App
+
+Install dependencies
+```bash
+npm install
+```
+
+Serve app localy
+```bash
+npm run serve
+```
+
+
+### API
+
+```bash
+npm install
+```
+
+Serve app localy
+```bash
+npm start
+```
