@@ -95,6 +95,7 @@ export default {
       formData.append("title", this.title);
       formData.append("body", this.body);
       formData.append("tags", this.tags);
+      formData.append("createdBy", this.$store.getters.getUser);
       this.$store.dispatch("saveNewPost", formData);
     },
     selectFile(image) {

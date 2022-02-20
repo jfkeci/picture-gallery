@@ -14,11 +14,12 @@
         height="300px"
         :src="$apiUrl + post.selectedFile"
       >
-        <v-card-title>{{ post.title }}</v-card-title>
       </v-img>
 
       <v-card-text class="text--primary mt-2">
-        <div>Description: {{ post.body }}</div>
+        <h3 class="my-3">{{ post.title }}</h3>
+
+        <div class="my-3">Description: {{ post.body }}</div>
       </v-card-text>
       <pre></pre>
       <v-card-actions>
@@ -102,19 +103,19 @@ export default {
   },
   computed: {
     loading() {
-      return this.$store.getters.getPostsLoading;
+      return this.$store.getters.getLoading;
     },
     user() {
       return this.$store.getters.getUser;
-    },
-    canEdit() {
-      return this.post.createdBy === this.user;
     },
     isLiked() {
       return this.post.likes.includes(this.user);
     },
     likeCount() {
       return this.post.likes.length;
+    },
+    canEdit() {
+      return this.$store.getters.getUser == this.post.createdBy;
     },
   },
 };
