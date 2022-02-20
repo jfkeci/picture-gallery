@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Comments from "../components/posts/comments/Comments";
+import Comments from "../components/comments/Comments";
 export default {
   name: "Single",
   components: {

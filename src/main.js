@@ -15,6 +15,7 @@ let url = 'http://localhost:5001/'
 axios.defaults.baseURL = url
 
 Vue.prototype.$apiUrl = url
+Vue.prototype.$appUrl = 'http://localhost:8080/'
 
 new Vue({
   router,
