@@ -1,6 +1,6 @@
 
-import { getPosts, saveNewPost, updatePost, toggleLike, getPost, deletePost } from '../reducers/api.js'
-import { commentPost, deleteComment, updateComment } from '../reducers/api.js'
+import { getPosts, saveNewPost, updatePost, toggleLike, getPost, deletePost } from '../reducers/posts.js'
+import { commentPost, deleteComment, updateComment } from '../reducers/comments.js'
 
 export default {
     state: {
