@@ -65,9 +65,6 @@ export default {
       this.$store.commit("showDialog");
     },
     showPost() {
-      console.log(this.$route.params.id);
-      console.log(this.post._id);
-      console.log(this.$route.params.id != this.post._id);
       if (this.$route.params.id != this.post._id) {
         this.$store.commit("setCurrentPost", this.post);
         this.$router.push({ name: "Single", params: { id: this.post._id } });
@@ -86,14 +83,6 @@ export default {
     },
     isLiked() {
       return this.post.likes.includes(this.$store.getters.getCurrentUser);
-    },
-  },
-  watch: {
-    posts: {
-      handler(val) {
-        console.log("@like", val);
-      },
-      deep: true,
     },
   },
 };
