@@ -66,7 +66,7 @@ export default {
       return this.comments.length > 0;
     },
     user() {
-      return this.$store.getters.getCurrentUser;
+      return this.$store.getters.getUser;
     },
   },
   data: () => ({
@@ -90,7 +90,7 @@ export default {
       let newComment = {
         postId: this.post._id,
         text: this.comment,
-        createdBy: this.$store.getters.getCurrentUser,
+        createdBy: this.$store.getters.getUser,
       };
       this.$store.dispatch("commentPost", newComment);
       this.comment = "";

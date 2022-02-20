@@ -83,7 +83,12 @@ export const updatePost = async (state, post) => {
 
 export const toggleLike = async (state, post) => {
     state.commit('setLoading', false)
-    await axios.patch(`/posts/like/${post._id}/${state.getters.getCurrentUser}`)
+    if (!state.getters.isLoggedIn) {
+        state.commit('setAction', 'login');
+        state.commit('showDialog')
+        return;
+    }
+    await axios.patch(`/posts/like/${post._id}/${state.getters.getUser}`)
         .then((res) => {
             let updatedPost = res.data
             state.commit('replacePost', updatedPost)
@@ -93,6 +98,8 @@ export const toggleLike = async (state, post) => {
 }
 
 export const deletePost = async (state, postId) => {
+
+
     state.commit('setLoading', true)
 
     await axios.delete(`/posts/${postId}`)
@@ -121,6 +128,11 @@ export const deletePost = async (state, postId) => {
 }
 
 export const commentPost = async (state, comment) => {
+    if (!state.getters.isLoggedIn) {
+        state.commit('setAction', 'login');
+        state.commit('showDialog')
+        return;
+    }
     await axios.post(`/comments/${comment.postId}`, {
         text: comment.text,
         createdBy: comment.createdBy

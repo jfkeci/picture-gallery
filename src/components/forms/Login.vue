@@ -20,9 +20,9 @@
             label="Password"
             required
           ></v-text-field>
-
-          <v-btn color="success" class="mr-4" @click="login"> Login </v-btn>
         </v-form>
+        <v-divider> </v-divider>
+        <small>Don't have an account? <a @click="register">Register</a></small>
       </v-container>
     </v-card-text>
     <v-card-actions>
@@ -59,6 +59,10 @@ export default {
       };
       this.$store.dispatch("loginUser", user);
       this.$refs.form.reset();
+    },
+    register() {
+      this.$store.commit("setAction", "register");
+      this.$store.commit("showDialog");
     },
   },
 };

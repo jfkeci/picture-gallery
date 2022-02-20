@@ -42,17 +42,17 @@
             label="Confirm password"
             required
           ></v-text-field>
-
-          <v-btn color="success" class="mr-4" @click="register">
-            Register
-          </v-btn>
         </v-form>
+        <v-divider> </v-divider>
+        <small>Don't have an account? <a @click="login">Login</a></small>
       </v-container>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="blue darken-1" text> Close </v-btn>
-      <v-btn color="blue darken-1" text> Save </v-btn>
+      <v-btn color="blue darken-1" text @click="$store.commit('hideDialog')">
+        Close
+      </v-btn>
+      <v-btn color="blue darken-1" text @click="register"> Register </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -94,6 +94,10 @@ export default {
       };
       this.$store.dispatch("registerUser", user);
       this.$refs.form.reset();
+    },
+    login() {
+      this.$store.commit("setAction", "login");
+      this.$store.commit("showDialog");
     },
   },
   watch: {

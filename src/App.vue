@@ -31,12 +31,27 @@
 
           <v-spacer></v-spacer>
 
+          <v-btn icon class="mx-5">
+            {{ user }}
+          </v-btn>
+
           <v-btn icon class="mx-2" @click="setAction('create')">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
 
-          <v-btn icon class="mx-3" @click="setAction('login')"> Login </v-btn>
           <v-btn
+            v-if="!loginCheck"
+            icon
+            class="mx-3"
+            @click="setAction('login')"
+          >
+            Login
+          </v-btn>
+          <v-btn v-if="loginCheck" icon class="mx-3" @click="logout">
+            Logout
+          </v-btn>
+          <v-btn
+            v-if="!loginCheck"
             icon
             class="mx-3"
             @click="setAction('register')"
@@ -57,11 +72,10 @@
           id="scrolling-techniques-3"
           class="overflow-y-auto"
           max-height="100vh"
-          style="padding-top: 30vh"
+          style="padding-top: 20vh"
         >
           <v-row no-gutters>
             <v-col cols="3">
-              <SearchBar />
               <Posts />
             </v-col>
             <v-col class="ml-3 mr-3">
@@ -97,7 +111,7 @@
             <v-list-item-group
               v-model="navGroup"
               active-class="deep-purple--text text--accent-4"
-              style="margin-top: 30vh"
+              style="margin-top: 20vh"
             >
               <v-list-item>
                 <v-list-item-title @click="goTo('home')">
@@ -114,19 +128,15 @@
           </v-list>
         </v-navigation-drawer>
 
-        <v-navigation-drawer v-model="postsDrawer" absolute temporary>
+        <v-navigation-drawer
+          v-model="postsDrawer"
+          absolute
+          temporary
+          width="400px"
+        >
           <v-list nav dense>
-            <v-list-item-group
-              v-model="postsGroup"
-              active-class="deep-purple--text text--accent-4"
-              style="margin-top: 30vh"
-            >
-              <v-list-item>
-                <v-list-item-title @click="goTo('about')">
-                  Posts here
-                </v-list-item-title>
-              </v-list-item>
-            </v-list-item-group>
+            <SearchBar />
+            <Posts />
           </v-list>
         </v-navigation-drawer>
       </v-card>
@@ -160,11 +170,17 @@ export default {
     filter: "newest",
   }),
   computed: {
+    loginCheck() {
+      return localStorage.getItem("user") === null;
+    },
     loading() {
       return this.$store.getters.getLoading;
     },
     action() {
       return this.$store.getters.getAction;
+    },
+    user() {
+      return this.$store.getters.getUser;
     },
     dialog: {
       get() {
@@ -187,6 +203,10 @@ export default {
     },
     closeDialog() {
       this.$store.commit("hideDialog");
+    },
+    logout() {
+      localStorage.setItem("user", null);
+      location.reload();
     },
   },
   watch: {

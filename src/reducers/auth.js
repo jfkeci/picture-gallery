@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-export const registerUser = async (state, user) => {
-    state.commit('setLoading', true)
+export const registerUser = async ({ commit }, user) => {
+    commit('setLoading', true)
     axios.post(`/user/register`, {
         name: user.name,
         surname: user.surname,
@@ -9,23 +9,25 @@ export const registerUser = async (state, user) => {
         password: user.password,
         confirmPassword: user.confirmPassword,
     }).then((res) => {
-        state.commit('setMessage', {
+        commit('setUser', res.data.user._id)
+        commit('setToken', res.data.token)
+        commit('setMessage', {
             text: 'Successfully registered ' + res.data.user.name,
             type: 'success'
         })
-        state.commit('setLoading', false)
-        state.commit('hideDialog')
+        commit('setLoading', false)
+        commit('hideDialog')
     }).catch(err => {
-        state.commit('setLoading', false)
+        commit('setLoading', false)
         switch (err.response.status) {
             case 400:
-                state.commit('setMessage', {
+                commit('setMessage', {
                     text: err.response.data.message,
                     type: 'error'
                 })
                 break;
             default:
-                state.commit('setMessage', {
+                commit('setMessage', {
                     text: 'Something went wrong',
                     type: 'error'
                 })
@@ -34,21 +36,22 @@ export const registerUser = async (state, user) => {
     })
 }
 
-export const loginUser = async (state, user) => {
+export const loginUser = async ({ commit }, user) => {
     axios.post(`/user/login`, {
         email: user.email,
         password: user.password,
     }).then((res) => {
-        state.commit('setCurrentUser', res.data.user._id)
+        commit('setUser', res.data.user._id)
+        commit('setToken', res.data.token)
         localStorage.setItem('user', {
             id: res.data.user._id,
             time: Date.now()
         })
-        state.commit('setMessage', {
+        commit('setMessage', {
             text: 'Successfully logged in',
             type: 'success'
         })
-        state.commit('setLoading', false)
-        state.commit('hideDialog')
+        commit('setLoading', false)
+        commit('hideDialog')
     })
 }

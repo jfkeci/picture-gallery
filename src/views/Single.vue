@@ -1,12 +1,7 @@
 <template>
-  <div style="height: 70vh; overflow-y: auto; overflow-x: hidden" v-if="post">
-    <v-card class="mx-auto my-5" elevation="4" outlined shaped max-width="80vh">
-      <v-img
-        class="white--text align-end"
-        :src="$apiUrl + post.selectedFile"
-        height="50vh"
-        width="80vh"
-      >
+  <div style="overflow-y: auto; overflow-x: hidden" v-if="post">
+    <v-card class="mx-auto my-5" elevation="4" outlined shaped max-width="60vw">
+      <v-img class="white--text align-end" :src="$apiUrl + post.selectedFile">
         <v-card-title>{{ post.title }}</v-card-title>
       </v-img>
 
