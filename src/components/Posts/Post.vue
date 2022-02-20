@@ -42,10 +42,8 @@
 </template>
 
 <script>
-import routerMixin from "../../mixins/routerMixin";
 export default {
   name: "Post",
-  mixins: [routerMixin],
   props: {
     post: {
       required: true,
@@ -72,7 +70,7 @@ export default {
       console.log(this.$route.params.id != this.post._id);
       if (this.$route.params.id != this.post._id) {
         this.$store.commit("setCurrentPost", this.post);
-        this.goTo("post", this.post._id);
+        this.$router.push({ name: "Single", params: { id: this.post._id } });
       }
     },
   },

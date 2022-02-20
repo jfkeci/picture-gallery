@@ -108,16 +108,12 @@
               active-class="deep-purple--text text--accent-4"
               style="margin-top: 20vh"
             >
-              <v-list-item>
-                <v-list-item-title @click="goTo('home')">
-                  Home
-                </v-list-item-title>
+              <v-list-item to="/">
+                <v-list-item-title> Home </v-list-item-title>
               </v-list-item>
 
-              <v-list-item>
-                <v-list-item-title @click="goTo('about')">
-                  About
-                </v-list-item-title>
+              <v-list-item to="/about">
+                <v-list-item-title> About </v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -140,7 +136,6 @@
 </template>
 
 <script>
-import routerMixin from "./mixins/routerMixin";
 import Posts from "./components/posts/Posts";
 import DialogContent from "./components/DialogContent";
 import Footer from "./components/Footer";
@@ -149,7 +144,6 @@ import Message from "./components/Message";
 
 export default {
   name: "App",
-  mixins: [routerMixin],
   components: {
     Posts,
     Footer,
