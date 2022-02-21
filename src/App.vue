@@ -31,7 +31,12 @@
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
 
-          <v-btn icon class="mx-2" @click="setAction('create')">
+          <v-btn
+            v-if="isLoggedIn"
+            icon
+            class="mx-2"
+            @click="setAction('create')"
+          >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
 
